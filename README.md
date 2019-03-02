@@ -11,10 +11,8 @@
 
 Example Input:  
 
-<img align="left" src="Example.png" height="200"> <img align="right" src="Input.png" height="200">
-<!---
+<img align="left" src="Example.png" height="200">|<img align="right" src="Input.png" height="200">
 |-|-|
---->
   
 ### If you want to use your own word list for the dictionary:
 
@@ -24,4 +22,6 @@ Example Input:
 The word list used by our code is provided as origins.txt
 
 ### Up next:
-Subsorting words by edit distance so closer words appear together.
+- [x] Sorting words by score.  
+- [x] Adding support for score multipliers.  
+- [] Subsorting words by edit distance so closer words appear together.  
