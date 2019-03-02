@@ -11,7 +11,7 @@
 
 Example Input:  
 
-|<img src="Example.png" style="float:left;height:200px">|<img src="Input.png" style="float:right;height:190px">|
+|<img src="Example.png" height="200">|<img src="Input.png" height="200">|
 |-|-|
 
   
