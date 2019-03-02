@@ -10,7 +10,7 @@
 3. The words are available in `cheats.txt` sorted by score. Scores used are from Scrabble.
 
 Example Input:  
-<img align="left" src="Example.png" height="200">
+<img src="Example.png" height="200">
   
 ### If you want to use your own word list for the dictionary:
 
