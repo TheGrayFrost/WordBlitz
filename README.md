@@ -11,9 +11,10 @@
 
 Example Input:  
 
-|<img src="Example.png" height="200">|<img src="Input.png" height="200">|
+<img align="left" src="Example.png" height="200"> <img align="right" src="Input.png" height="200">
+<!---
 |-|-|
-
+--->
   
 ### If you want to use your own word list for the dictionary:
 
