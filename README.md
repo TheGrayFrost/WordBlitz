@@ -3,7 +3,7 @@
 #### Code to play the Word Blitz game or variants thereof
 
 ### Usage:
-1. Run `python gen.py (dimension)`. Eg: `python gen.py 3`  
+1. Run `python gen.py (dimension)`. Eg: `python gen.py 3` or `python gen.py`  
     _**Note: Dimension is an optional argument with default value 4**_
 2. Input the data line by line (case-insensitive)  
     _For bonuses trail the letters with the bonus code. [2L = 2, 3L = 3, 2W = 4, 3W = 5]_
