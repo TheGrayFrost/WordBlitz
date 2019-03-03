@@ -41,7 +41,8 @@ def intake(file):
 
 	print ('Memory dump completed.\nLearnt ' + str(len(st)) + ' words.')
 
-if len(sys.argv) != 2:
-	print ('Incorrect command.\nUsage: python intake.py /path/to/your/word/list')
-else:
-	intake(sys.argv[1])
+if __name__ ==  '__main__':
+	if len(sys.argv) != 2:
+		print ('Incorrect command.\nUsage: python intake.py /path/to/your/word/list')
+	else:
+		intake(sys.argv[1])
