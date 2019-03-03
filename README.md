@@ -7,7 +7,7 @@
     _**Note: Dimension is an optional argument with default value 4**_
 2. Input the data line by line (case-insensitive)  
     _For bonuses trail the letters with the bonus code. [2L = 2, 3L = 3, 2W = 4, 3W = 5]_
-3. The words are available in `cheats.txt` sorted by score. Scores used are from Scrabble.
+3. The words are available in `cheat.txt` sorted by score. Scores used are from Scrabble.
 
 Example Input:  
 <img src="Example.png" height="200">
@@ -20,6 +20,6 @@ Example Input:
 The word list used by our code is provided as origins.txt
 
 ### Up next:
-- [x] Sorting words by score.  
-- [x] Adding support for score multipliers.  
-- [ ] Subsorting words by edit distance so closer words appear together.  
+**- [x] Sorting words by score.**  
+**- [x] Adding support for score multipliers.**  
+**- [ ] Subsorting words by edit distance so closer words appear together.**  
