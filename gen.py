@@ -8,8 +8,11 @@ st = set()
 r = set()
 
 def turnon():
-	# dictionary loads
-	global r, st
+	
+	global r, st, score
+
+	# st contains vocabulary
+	# r contains word prefixes
 	with open('dicts.pckl', 'rb') as f:
 		[st, r] = pickle.load(f)
 
@@ -41,11 +44,11 @@ def parser (dim = 4):
 			l = str(input('line ' + str(i+1) + ': ')).lower()
 			R = []
 			for u in l:
-				if u.isalpha():
+				if u.isalpha():			# letter
 					R.append([u, 1])
-				elif u.isdigit():
+				elif u.isdigit():		# multiplier bonus
 					R[-1][1] = int(u)
-				else:
+				else: 					# invalid character
 					print ('Invalid character: ' + u + '. Try again.')
 					inch = True
 					break
@@ -62,10 +65,22 @@ def parser (dim = 4):
 	return M
 
 # word searcher
+# ieff, jeff: current position coordinates
+# Hcur: occupied positions matrix
+# M: word grid
+# box: set of words found with score
+# curst: string until now
+# cscore: score accumulated till now
+# mplier: multiplier
 def explore (ieff, jeff, Hcur, M, box, curst = '', cscore = 0, mplier = 1):
 	i = ieff + 1
 	j = jeff + 1
+
+	# add letter to current string. declare location occupied in Hcur
 	curst += M[ieff][jeff][0]
+	Hcur[i,j] = True
+
+	# update score and bonuses
 	if M[ieff][jeff][1] == 4:
 		cscore += score[M[ieff][jeff][0]]
 		mplier *= 2
@@ -74,18 +89,20 @@ def explore (ieff, jeff, Hcur, M, box, curst = '', cscore = 0, mplier = 1):
 		mplier *= 3
 	else:
 		cscore += score[M[ieff][jeff][0]] * M[ieff][jeff][1]
-	Hcur[i,j] = True
+
+	# if current string is a word, add it to box with score
 	if curst in st:
 		box[curst] = max(box[curst], cscore*mplier)
-	if curst in r:
-		cx = [(i+1,j), (i-1,j), (i,j+1), (i,j-1), (i+1,j+1), (i+1,j-1), (i-1,j-1), (i-1,j+1)]
-		cx = [t for t in cx if not Hcur[t]]
-		cs = [curst + M[t[0]-1][t[1]-1][0] for t in cx]
-		cx = [cx[i] for i in range(len(cs)) if cs[i] in r]
-		for u in cx:
-			explore (u[0]-1, u[1]-1, Hcur, M, box, curst, cscore, mplier)
-	Hcur[i,j] = False
-	curst = curst[:-1]
+	
+	cx = [(i+1,j), (i-1,j), (i,j+1), (i,j-1), (i+1,j+1), (i+1,j-1), (i-1,j-1), (i-1,j+1)]	# all directions explorable
+	cx = [t for t in cx if not Hcur[t]]														# all locations available
+	cs = [curst + M[t[0]-1][t[1]-1][0] for t in cx]											# strings formed with those letters
+	cx = [cx[i] for i in range(len(cs)) if cs[i] in r]										# locations that lead to valid words
+	for u in cx:
+		explore (u[0]-1, u[1]-1, Hcur, M, box, curst, cscore, mplier)						# explore them
+
+	# undoing recursion set up
+	# score reset
 	if M[ieff][jeff][1] == 4:
 		cscore -= score[M[ieff][jeff][0]]
 		mplier /= 2
@@ -95,56 +112,63 @@ def explore (ieff, jeff, Hcur, M, box, curst = '', cscore = 0, mplier = 1):
 	else:
 		cscore -= score[M[ieff][jeff][0]] * M[ieff][jeff][1]
 
+	# location freed and string reset
+	Hcur[i,j] = False
+	curst = curst[:-1]
+
+# sort by score
 def sorter(val):
 	return val[1]
 
+# exploration driver
 def explorer (M, dim = 4):
+
+	# set up the position occupied matrix
 	expdim = dim + 2
-	box = defaultdict(lambda: 0)
 	H = np.full((expdim, expdim), False)
 	for i in range(expdim):
 		H[0,i] = H[-1,i] = H[i,0] = H[i,-1] = True
+
+	# call explore for all starting locations in grid
+	box = defaultdict(lambda: 0)
 	for i in range(dim):
 		for j in range(dim):
 			explore(i,j,H,M,box)
-			#print (box)
+	
+	# sort words found by score. take only those with length >= 3
 	m = list(box.items())
 	m.sort(key = sorter, reverse = True)
+	m = [u for u in m if len(u[0]) >= 3]
 	return m
 
 if __name__ ==  '__main__':
-	# get words
-	if len(sys.argv) == 1:
+	if len(sys.argv) == 1:		# normal call
 		turnon()
 		M = parser()
 		m = explorer (M)
-	elif len(sys.argv) == 2:
+	elif len(sys.argv) == 2:	# call with dimensions specified
 		try:
 			dim = int(sys.argv[1])
 			if dim < 3:
 				raise Exception()
+			turnon()
+			M = parser(dim)
+			m = explorer (M, dim)
+			print ('Looking for words...')
 		except:
 			print ('Incorrect command.')
 			print ('Dimension should be an integer >= 3.')
 			print ('Usage: python gen.py (optional-dimension)')
 			exit()
-		finally:
-			turnon()
-			M = parser(dim)
-			m = explorer (M, dim)
-			print ('Looking for words...')
 	else:
 		print ('Incorrect command.\nUsage: python gen.py (optional-dimension)')
 		exit()
 
-	# sort by length and write to cheat.txt
+	# write words to cheat.txt
 	with open('cheat.txt', 'w') as f:
 		try:
-			count = 0
 			for u in m:
-				if (len(u[0]) >= 3):
-					f.write(u[0] + ' ' + str(u[1]) + '\n')
-					count += 1
-			print (str(count) + ' words found and written into cheat.txt\nBest of luck!! *wink*')
+				f.write(u[0] + ' ' + str(u[1]) + '\n')
+			print (str(len(m)) + ' words found and written into cheat.txt\nBest of luck!! *wink*')
 		except:
 			print ('IOError: Could not open cheat.txt for writing.')
