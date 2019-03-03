@@ -20,6 +20,6 @@ Example Input:
 The word list used by our code is provided as origins.txt
 
 ### Up next:
-**- [x] Sorting words by score.**  
-**- [x] Adding support for score multipliers.**  
-**- [ ] Subsorting words by edit distance so closer words appear together.**  
+- [x] Sorting words by score.  
+- [x] Adding support for score multipliers.  
+- [ ] Subsorting words by edit distance so closer words appear together.  
